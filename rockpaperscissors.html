@@ -1,4 +1,78 @@
+<head></head>
+<body>
+    <h1>Rock Paper Scissors</h1>
+    <div class="choices">
+        <button>Rock</button>
+        <button>Paper</button>
+        <button>Scissors</button>
+    </div>
+    <div id="gameScore">
+        <h2>Score</h2>
+        <p id="computerScore">Computer Score: 0</p>
+        <p id="playerScore">Your Score: 0</P>
+    </div>
+    <div class="gameResult">
+        <h2>Results</h2>
+    </div>
+
+</body>
+
+
 <script>
+
+    const buttons = document.querySelectorAll('div.choices > button');
+    const results = document.querySelector('div.gameResult');
+    let player_score = 0;
+    let computer_score = 0;
+    const winningScore = 5;
+    // we use the .forEach method to iterate through each button
+    buttons.forEach((button) => {
+
+    // and for each one we add a 'click' listener
+        button.addEventListener('click', () => {
+
+            let playerSelection = button.textContent.toLowerCase();
+            let result = rockPaperScissors(playerSelection, computerPlay());
+            updateScore(result);
+
+            const computerScore = document.querySelector('#computerScore');
+            const playerScore = document.querySelector('#playerScore');
+
+            computerScore.textContent = `Computer Score: ${computer_score}`;
+            playerScore.textContent = `Your Score: ${player_score}`;
+
+            const para = document.createElement('p');
+            para.textContent = result;
+            results.appendChild(para);
+            
+            checkWinner(player_score, computer_score, winningScore);
+            
+        });
+    });
+
+    function checkWinner(player_score, computer_score, winningScore){
+        let winMessage;
+        if (player_score == winningScore) {
+            winMessage = "You win the Game!";
+        }
+        else if (computer_score == winningScore) {
+            winMessage = "The computer wins the game!";
+        }
+        const para = document.createElement('p');
+        para.textContent = winMessage;
+        results.appendChild(para);
+
+
+
+    }
+
+    function updateScore(result) {
+        if (result.charAt(4) == "L")  computer_score++;
+		else if(result.charAt(4) == "W") player_score++;
+			
+    }
+
+
 	function computerPlay(){
 		let rps_array = ['rock', 'paper', 'scissors'];
 		let random_number = Math.floor(Math.random()*rps_array.length);
@@ -8,20 +82,14 @@
 
 	}
 	
-	function playerChoice(){
-		let player_choice = prompt("Type Rock, Paper, or Scissors to make your choice: ");
-		return player_choice.toLowerCase();
-	}
+
 
 	function rockPaperScissors(playerSelection, computerSelection){
 		let result;
-		while (playerSelection == computerSelection){
-			console.log("It's a tie, try again!")
-			playerSelection = playerChoice();
-			computerSelection = computerPlay();
-			
-		}
-		if (playerSelection == "rock"){
+		if(playerSelection == computerSelection){
+            result = "It's a tie, play again!"
+        }
+		else if (playerSelection == "rock"){
 			if (computerSelection == "paper"){
 				result = "You Lose! " + computerSelection + " beats " +playerSelection;
 			}
@@ -48,31 +116,6 @@
 		return result;
 	}
 
-	function game(num_of_rounds){
-		let i;
-		let playerScore = 0;
-		let computerScore = 0;
-		for (i = 0; i < num_of_rounds; i++){
-			let round = rockPaperScissors(playerChoice(), computerPlay());
-			console.log(round)
-			if (round.charAt(4) == "L"){
-				computerScore++;
-				console.log("computerScore: " + computerScore + " playerScore: "+ playerScore)
-			}
-			else{
-				playerScore++;
-				console.log("computerScore: " + computerScore + " playerScore: "+ playerScore)
-			}
-		}
 
-		if (playerScore > computerScore){
-			console.log("You win " + playerScore + " to " + computerScore)
-		}
-		else{
-			console.log("You lose " + playerScore + " to " + computerScore)
-		}
-	}
-
-	game(5)
 
 </script>
